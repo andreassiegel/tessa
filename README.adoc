@@ -1,0 +1,298 @@
+= Tessa
+:experimental:
+:idprefix:
+:idseparator: -
+ifndef::env-github[:icons: font]
+ifdef::env-github,env-browser[]
+:toc: preamble
+:toclevels: 3
+endif::[]
+ifdef::env-github[]
+:status:
+:outfilesuffix: .adoc
+:!toc-title:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+
+Tessa takes the pain out of documenting your test suite.
+Say goodbye to outdated and incomplete test documentation and hello to easily maintainable test suites with Tessa.
+
+image::tessa.jpg[Tessa taking the pain out of documenting test suites]
+
+Tessa stands for Test documentation Engine for Java using Asciidoctor (and only ChatGPT knows how the name maps exactly).
+
+== Overview
+
+Tessa aims to simplify the task of documenting tests and reduces the risk of documentation becoming outdated or incomplete.
+With Tessa, you can easily keep your test documentation up-to-date and ensure that your test suite is well-documented and easily maintainable.
+
+Predominantly, the pain point the project addresses is the need to switch between documentation and source code when implementing or reviewing tests.
+It more often than not is hard to match what is documented against what has been implemented, and not having a single source of truth makes the overall process quite error-prone.
+
+Following the general idea of "documentation as code", Tessa wants to bridge the gap between test documentation and implementation by moving the two parts closer together.
+
+Test documentation is supposed to be human-readable, and while test implementation also needs to be readable by humans the nature of tests and implementation details often do not make the tests particularly easy to read.
+
+Tessa relies on test documentation that is included in the code:
+Various kind of comments in the source code, as well as commonly used annotations used in (JUnit) tests, are the foundation for generated test documentation.
+At the same time, the comments in the code are expected to help understanding the test implementation.
+For further information on how comments and annotations are used to generate the test documentation, see the <<conventions>> section.
+
+The Tessa project consists of:
+
+- link:tessa-test-annotations/[Tessa Test Annotations] - a set of (optional) annotations for providing additional information in the code
+- link:tessa-maven-plugin/[Tessa Maven Plugin] - a Maven plugin parsing Java test files to automatically generate test documentation files in Asciidoctor format
+
+== Setup
+
+Add the test dependency and plugin to the `pom.xml` file of your project to get started automating your test documentation:
+
+.Tessa Annotations dependency
+[source,xml]
+----
+<dependency>
+  <groupId>de.andreassiegel</groupId>
+  <artifactId>tessa-test-annotations</artifactId>
+  <version>${tessa.version}</version>
+  <scope>test</scope>
+</dependency>
+----
+
+.Basic Tessa Maven Plugin configuration
+[source,xml]
+----
+<plugin>
+<groupId>de.andreassiegel</groupId>
+<artifactId>tessa-maven-plugin</artifactId>
+<version>${tessa.version}</version>
+<executions>
+  <execution>
+    <goals>
+      <goal>generate-test-docs</goal>
+    </goals>
+  </execution>
+</executions>
+</plugin>
+----
+
+For more information on how to configure the Tessa Maven Plugin, see the link:tessa-maven-plugin/README.adoc#configuration[plugin configuration documentation].
+
+== Conventions [[conventions]]
+
+In general, Tessa attempts to make use of standard JUnit annotations and uses comments to extract test descriptions and further information for test documentation pages:
+
+[options="header", cols=",,a"]
+|===
+|Information |Origin |Example
+
+|Document Title |`@DisplayName` annotation of the test class
+|[source,java]
+----
+@DisplayName("My Tests")
+class MyTest {}
+----
+
+|Overall Test Description |Javadoc comment of the test class
+|[source,java]
+----
+/**
+* This is a sample test to illustrate how information gets extracted.
+*/
+class MyTest {}
+----
+
+|Overall Status |link:tessa-test-annotations/[`@Status` annotation] of the test class
+|[source,java]
+----
+@Status("Documented")
+class MyTest {}
+----
+
+|Further overall information |First block comment in the test class (supports Asciidoc syntax)
+|[source,java]
+----
+class MyTest {
+  /*
+  == Prerequisites
+
+  This describes high-level aspects that are relevant even before setting up the test.
+
+  You can basically put any content in Asciidoc syntax here.
+   */
+}
+----
+
+|Setup information |Javadoc comment of the method annotated with `@BeforeAll`
+|[source,java]
+----
+class MyTest {
+
+  /** This needs to be done before all the tests can run. */
+  @BeforeAll
+  static void setup() {}
+}
+----
+
+|Cleanup information |Javadoc comment of the method annotated with `@AfterAll`
+|[source,java]
+----
+class MyTest {
+
+  /** This needs to be done after all tests ran. */
+  @AfterAll
+  static void cleanup() {}
+}
+----
+
+|Overall Warning |`@Disabled` annotation of the test class
+|[source,java]
+----
+@Disabled("These tests are not working")
+class MyTest {}
+----
+
+|Test Categories |Regions in the class that contain test methods, i.e., methods that are annotated with either `@Test` or `@ParameterizedTest`
+|[source,java]
+----
+class MyTest {
+  // region Happy Cases
+
+  @Test
+  void happyCase() {}
+
+  // endregion
+
+  // region Failure Cases
+
+  @Test
+  void failureCase() {}
+
+  // endregion
+}
+----
+
+|Test Case Title |`@DisplayName` annotation of the test method
+|[source,java]
+----
+@Test
+@DisplayName("My first test case")
+void testCase() {}
+----
+
+|Test Case Description |Javadoc comment of the test method
+|[source,java]
+----
+/**
+* This is a sample test case.
+*/
+@Test
+void testCase() {}
+----
+
+|Test Case Status |link:tessa-test-annotations/[`@Status` annotation] of the test method
+|[source,java]
+----
+@Status("Implemented")
+@Test
+void testCase() {}
+----
+
+|Test Case Warning |`@Disabled` annotation of the test method
+|[source,java]
+----
+@Disabled("This test is not working")
+@Test
+void testCase() {}
+----
+
+|Further information about the test case |First block comment in the test method (supports Asciidoc syntax)
+|[source,java]
+----
+@Test
+void testCase() {
+  /*
+  Some general information
+   */
+}
+----
+
+|Test Case Sections |Regions in the test methods
+|[source,java]
+----
+@Test
+void testCase() {
+  // region Arrange
+
+  ...
+
+  // endregion
+
+  // region Act
+
+  ...
+
+  // endregion
+
+  // region Assert
+
+  ...
+
+  // endregion
+}
+----
+
+|Test Steps |Line and block comments inside a test method, either inside or outside regions (not both). Asciidoc syntax is supported.
+|[source,java]
+----
+@Test
+void testCase() {
+  // region Arrange
+
+  // Some first step
+
+  // Some other step
+
+  // endregion
+
+  // region Act
+
+  /*
+  \|===
+  \|Header 1 \|Header 2
+
+  \|Some
+  \|table
+  \|===
+   */
+
+  // endregion
+}
+----
+|===
+
+NOTE: Wherever regions are used to extract information from the code, the regions are optional:
+If you do not group your test code and its comments using region line comments `// region My Region` and `// endregion`, the generated documentation will just be missing the subheadings that are derived from the region names.
+
+== What could be next?
+
+So far, Tessa handles only general (meta) information and descriptions about tests, and while this might be a good start, there are still various moving parts left that make documenting and implementing tests tedious:
+
+- Test data documentation (and initialization)
+- Interactions with API mocks
+- Execution of the functionality to test
+- Assertions
+- Parameters or parameterized tests
+
+Some use cases may require very specific (and potentially complex) implementations that benefit from separate documentation using code comments as an abstraction level.
+For such cases, Tessa is already well-suited.
+
+Other use cases, like using https://rest-assured.io/[REST assured], already provide a code structure that would allow for extraction of execution and assertion information from the test implementation.
+So this could be a potential enhancement of Tessa's capabilities in the future.
+
+Once a good sweet spot between specific/individual and standardized/conventional test implementation is identified, further information could be extracted right from the code.
+Ideally, this might further avoid redundancy between documentation and implementation.
+
+And, last but not least, Tessa currently supports only a single documentation style but extending the configuration options to support the use of custom templates for the generated documentation could follow.

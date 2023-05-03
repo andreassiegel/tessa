@@ -1,0 +1,47 @@
+= Tessa Test Annotations
+:experimental:
+:idprefix:
+:idseparator: -
+ifndef::env-github[:icons: font]
+ifdef::env-github,env-browser[]
+:toc: preamble
+:toclevels: 3
+endif::[]
+ifdef::env-github[]
+:status:
+:outfilesuffix: .adoc
+:!toc-title:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+
+Tessa Test Annotations provide additional annotations that are no standard means of JUnit, etc.
+
+The annotations are used to distinctively express information in the test source code to allow for extraction during the generation of test documentation.
+
+Therefore, they have no implication on the behavior of the annotated code, their only purpose is documentation, i.e., the link:../tessa-maven-plugin/[Tessa Maven Plugin] uses the annotations as entrypoint to retrieve information.
+The compiler discards the annotations.
+
+== Available Annotations
+
+The following annotations are available:
+
+[options="header", cols="m,,a"]
+|===
+|Annotation |Description |Example
+
+|@Status
+|Status of the test (method or class). The value can be any String.
+|[source,java]
+----
+@Status("Documented")
+class MyTests {
+
+  @Test
+  @Status("Documented")
+  void testCase() {}
+}
+----
+|===

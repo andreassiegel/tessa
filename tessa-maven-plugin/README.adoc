@@ -1,0 +1,135 @@
+= Tessa Maven Plugin
+:experimental:
+:idprefix:
+:idseparator: -
+ifndef::env-github[:icons: font]
+ifdef::env-github,env-browser[]
+:toc: preamble
+:toclevels: 3
+endif::[]
+ifdef::env-github[]
+:status:
+:outfilesuffix: .adoc
+:!toc-title:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+
+The Tessa Maven Plugin generates comprehensive test documentation from Java code using Asciidoctor format, simplifying the task of documenting tests and ensuring that your test suite is well-documented and easily maintainable.
+
+Tessa analyzes Java test code and extracts documentation comments that are then transformed into comprehensive AsciiDoc documents.
+
+The generated documents provide an overview of the test suite, including information on the individual tests.
+
+== Plugin Goals
+
+The Tessa Maven Plugin supports the following Maven goals that get (by default) executed during the build lifecycle phases described below once corresponding executions are defined in the plugin configuration:
+
+[options="header", cols="m,,m"]
+|===
+|Goal |Description |Default Lifecycle Phase
+
+|clean-test-docs
+|Cleans the output directory, i.e., all contained files and the directory itself get deleted.
+|clean
+
+|generate-test-docs
+|Generates test documentation from the Java source files in the input directories, and writes test documentation files to the output directory.
+|site
+|===
+
+== Configuration [[configuration]]
+
+[options="header", cols="m,,m"]
+|===
+|Configuration Parameter |Description |Default Value
+
+|inputDirectories
+|The directories to read the test files from.
+|${project.build.testSourceDirectory}
+
+|filenameRegex
+|The regular expression that is applied to filter the files found in the input directories so that documentation is only generated for relevant (test) files.
+|\w+(IT\|Test)\.java$
+
+|linkBaseUrl
+|The base URL of the source files in the repository. If this parameter is set, the generated documentation will include links to the source files it was generated from.
+|""
+
+|outputDirectory
+|The target directory for generated documentation.
+|${project.build.directory}/test-documentation
+
+|index
+|<<index-configuration>>
+|
+|===
+
+=== Index Configuration [[index-configuration]]
+
+The following parameters are used to configure the documentation index.
+
+All parameters are defined inside `<index></index>` in the plugin configuration.
+
+[options="header", cols="m,,m"]
+|===
+|Configuration Parameter |Description |Default Value
+|generateIndex
+|Defines whether the plugin should generate an index file, i.e., an overview of all tests.
+|true
+
+|name
+|The name of the subdirectory to create the test documentation files in, as well as the filename of the index file without file ending.
+|tests
+
+|title
+|The title of the test documentation index file.
+|Test Overview
+|===
+
+=== Full Example
+
+The snippet below illustrates a full plugin configuration:
+
+[source,xml]
+----
+<plugin>
+<groupId>de.andreassiegel</groupId>
+<artifactId>tessa-maven-plugin</artifactId>
+<version>${tessa.version}</version>
+<configuration>
+  <inputDirectories>
+    <inputDirectory>src/test/java</inputDirectory>
+    <inputDirectory>src/integration-test/java</inputDirectory>
+  </inputDirectories>
+  <filenameRegEx>\w+(IT|Test)\.java$</filenameRegEx>
+  <linkBaseUrl>https://github.com/andreassiegel/tessa/tree/main</linkBaseUrl>
+  <outputDirectory>${project.build.directory}/test-docs</outputDirectory>
+  <index>
+    <generateIndex>true</generateIndex>
+    <title>${project.name} Tests</title>
+    <name>service-tests</name>
+  </index>
+</configuration>
+<executions>
+  <execution>
+    <goals>
+      <goal>clean-test-docs</goal>
+    </goals>
+  </execution>
+  <execution>
+    <goals>
+      <goal>generate-test-docs</goal>
+    </goals>
+  </execution>
+</executions>
+</plugin>
+----
+
+== About the Plugin
+
+The plugin uses https://javaparser.org/[JavaParser] to read and parse (Surprise!) the files of Java tests to populate a data model for test documentation.
+
+This model is then used to generate https://asciidoctor.org/[Asciidoctor] documents based on a https://freemarker.apache.org/[Freemarker] template.
