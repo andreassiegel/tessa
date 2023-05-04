@@ -23,7 +23,7 @@ image:https://img.shields.io/badge/License-Apache%20License%202.0-blue.svg[Apach
 Tessa takes the pain out of documenting your test suite.
 Say goodbye to outdated and incomplete test documentation and hello to easily maintainable test suites with Tessa.
 
-image::tessa.jpg[Tessa taking the pain out of documenting test suites]
+image::tessa.jpg[Tessa taking the pain out of documenting test suites, width=50%]
 
 Tessa stands for Test documentation Engine for Java using Asciidoctor (and only ChatGPT knows how the name maps exactly).
 
