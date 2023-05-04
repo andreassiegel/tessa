@@ -1,0 +1,28 @@
+= Tessa Sample Tests
+:experimental:
+:idprefix:
+:idseparator: -
+ifndef::env-github[:icons: font]
+ifdef::env-github,env-browser[]
+:toc: preamble
+:toclevels: 3
+endif::[]
+ifdef::env-github[]
+:status:
+:outfilesuffix: .adoc
+:!toc-title:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+
+[options="header", cols=",,", %autowidth.stretch]
+|===
+|Title |Description |Status
+
+|link:/Users/andreas/Documents/development/personal/tessa/examples/examples/SampleTest.adoc[Sample Test]
+|This test acts as a showcase to illustrate how documentation in the test class is turned into a
+test documentation file.
+|Documented
+|===

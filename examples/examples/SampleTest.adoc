@@ -1,0 +1,118 @@
+= Sample Test
+:experimental:
+:idprefix:
+:idseparator: -
+ifndef::env-github[:icons: font]
+ifdef::env-github,env-browser[]
+:toc: preamble
+:toclevels: 3
+endif::[]
+ifdef::env-github[]
+:status:
+:outfilesuffix: .adoc
+:!toc-title:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+
+[cols="h,", %autowidth.stretch]
+|===
+|Description
+|This test acts as a showcase to illustrate how documentation in the test class is turned into a
+test documentation file.
+
+|Status
+|Documented
+
+|Source File Link
+|link:https://github.com/andreassiegel/tessa/tree/develop/examples/src/test/java/de/andreassiegel/tessa/examples/SampleTest.java[`src/test/java/de/andreassiegel/tessa/examples/SampleTest.java`]
+|===
+
+== Prerequisites
+
+In order to get nice and meaningful test documentation out of a Java file,
+a few things need to be taken into account when writing the file:
+
+- @DisplayName annotations need to be used
+- test cases should be organized in regions
+- the class itself as well as individual test cases need Javadoc comments
+- additional information is set in a block comment at class level
+
+== Setup
+
+This needs to be done before all the tests can run.
+
+== Cleanup
+
+This needs to be done after all tests ran.
+
+== Test Cases
+
+WARNING: These tests are currently not working because there is no implementation.
+
+=== 1. Happy Cases
+
+==== 1.1. Happy Case 1
+
+[cols="h,", %autowidth.stretch]
+|===
+|Description
+|Test cases focussing on different happy case scenarios that are defined by parameters.
+
+|Status
+|Documented
+|Method Link
+|link:https://github.com/andreassiegel/tessa/tree/develop/examples/src/test/java/de/andreassiegel/tessa/examples/SampleTest.java#L72-L89[`happyCase1`]
+|===
+
+
+
+=== 2. Failure Cases
+
+==== 2.1. Failure Case 1
+
+[cols="h,", %autowidth.stretch]
+|===
+|Description
+|This is an individual and specific failure case that does not use any parameters.
+
+|Status
+|Documented
+|Method Link
+|link:https://github.com/andreassiegel/tessa/tree/develop/examples/src/test/java/de/andreassiegel/tessa/examples/SampleTest.java#L96-L141[`failureCase1`]
+|===
+
+WARNING: This test is currently not working because of reasons.
+
+There might also be further information for test cases.
+
+===== Arrange
+
+Initialize the DB
+
+Do the mock API calls
+
+===== Act
+
+
+|===
+|Header 1 |Header 2
+
+|Some table content
+|Other content
+
+|Even more content
+|_This seems italic!_
+|===
+
+
+Do the request
+
+===== Assert
+
+- Check the response
+
+- Verify mock interactions
+
