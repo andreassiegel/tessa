@@ -38,6 +38,14 @@
 
     <!-- Tessa version -->
     <tessa.version>${project.version}</tessa.version>
+
+    <!-- Confluence Publisher -->
+    <asciidoc-confluence-publisher-maven-plugin.version>0.19.0</asciidoc-confluence-publisher-maven-plugin.version>
+    <asciidoc-confluence-publisher-maven-plugin.rootConfluenceUrl>https://andreassiegel.atlassian.net/wiki</asciidoc-confluence-publisher-maven-plugin.rootConfluenceUrl>
+    <asciidoc-confluence-publisher-maven-plugin.spaceKey>~712020907b7927f2c540d8ac9d65dd6232a803</asciidoc-confluence-publisher-maven-plugin.spaceKey>
+    <asciidoc-confluence-publisher-maven-plugin.ancestorId>262145</asciidoc-confluence-publisher-maven-plugin.ancestorId>
+    <asciidoc-confluence-publisher-maven-plugin.username>${env.ANDREASSIEGEL_CONFLUENCE_USER}</asciidoc-confluence-publisher-maven-plugin.username>
+    <asciidoc-confluence-publisher-maven-plugin.password>${env.ANDREASSIEGEL_CONFLUENCE_API_TOKEN}</asciidoc-confluence-publisher-maven-plugin.password>
   </properties>
 
   <dependencyManagement>
@@ -114,6 +122,43 @@
             </execution>
           </executions>
         </plugin>
+
+        <!-- Confluence Publisher -->
+        <plugin>
+          <groupId>org.sahli.asciidoc.confluence.publisher</groupId>
+          <artifactId>asciidoc-confluence-publisher-maven-plugin</artifactId>
+          <version>${asciidoc-confluence-publisher-maven-plugin.version}</version>
+          <configuration>
+            <asciidocRootFolder>${project.basedir}</asciidocRootFolder>
+            <sourceEncoding>UTF-8</sourceEncoding>
+            <rootConfluenceUrl>${asciidoc-confluence-publisher-maven-plugin.rootConfluenceUrl}</rootConfluenceUrl>
+            <skipSslVerification>false</skipSslVerification>
+            <maxRequestsPerSecond>10</maxRequestsPerSecond>
+            <spaceKey>${asciidoc-confluence-publisher-maven-plugin.spaceKey}</spaceKey>
+            <ancestorId>${asciidoc-confluence-publisher-maven-plugin.ancestorId}</ancestorId>
+            <username>${asciidoc-confluence-publisher-maven-plugin.username}</username>
+            <password>${asciidoc-confluence-publisher-maven-plugin.password}</password>
+            <pageTitlePrefix xml:space="preserve"></pageTitlePrefix>
+            <pageTitleSuffix xml:space="preserve"></pageTitleSuffix>
+            <versionMessage>Update generated test documentation (by Tessa)</versionMessage>
+            <notifyWatchers>false</notifyWatchers>
+            <publishingStrategy>APPEND_TO_ANCESTOR</publishingStrategy>
+            <orphanRemovalStrategy>REMOVE_ORPHANS</orphanRemovalStrategy>
+            <convertOnly>${convertOnly}</convertOnly>
+            <attributes>
+              <version>${project.version}</version>
+            </attributes>
+          </configuration>
+          <executions>
+            <execution>
+              <id>publish-confluence</id>
+              <goals>
+                <goal>publish</goal>
+              </goals>
+              <phase>site</phase>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -141,6 +186,12 @@
       <plugin>
         <groupId>de.andreassiegel</groupId>
         <artifactId>tessa-maven-plugin</artifactId>
+      </plugin>
+
+      <!-- Confluence Publisher -->
+      <plugin>
+        <groupId>org.sahli.asciidoc.confluence.publisher</groupId>
+        <artifactId>asciidoc-confluence-publisher-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
