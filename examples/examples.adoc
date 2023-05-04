@@ -21,7 +21,7 @@ endif::[]
 |===
 |Title |Description |Status
 
-|link:examples/SampleTest.adoc[Sample Test]
+|<<examples/SampleTest.adoc#, Sample Test>>
 |This test acts as a showcase to illustrate how documentation in the test class is turned into a
 test documentation file.
 |Documented

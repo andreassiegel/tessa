@@ -23,7 +23,7 @@ endif::[]
 |Title |Description |Status
 
 <#list items as item>
-|link:${directory}/${item.filename}[${item.title}]
+|<<${directory}/${item.filename}#, ${item.title}>>
 |${item.description}
 |${item.status!}
 </#list>
@@ -33,7 +33,7 @@ endif::[]
 |Title |Description
 
 <#list items as item>
-|link:${directory}/${item.filename}[${item.title}]
+|<<${directory}/${item.filename}#, ${item.title}>>
 |${item.description}
 </#list>
 </#if>
