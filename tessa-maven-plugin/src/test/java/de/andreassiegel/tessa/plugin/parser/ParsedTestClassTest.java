@@ -27,6 +27,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import de.andreassiegel.tessa.plugin.model.TestSet;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class ParsedTestClassTest {
 
+  static final Path BASE_PATH = Paths.get("");
+
   // region streamAnnotatedMethods()
 
   @ParameterizedTest
@@ -55,7 +58,7 @@ class ParsedTestClassTest {
       String annotationName, String methodName, Integer expectedSize) throws IOException {
     // Arrange
     var path = Paths.get("src/test/resources/com/example/test/AnnotationTest.java");
-    ParsedTestFile parsedTestFile = new ParsedTestFile(path);
+    ParsedTestFile parsedTestFile = new ParsedTestFile(path, BASE_PATH);
     ParsedTestClass parsedClass = parsedTestFile.getTestClass("AnnotationTest").get();
 
     // Act
@@ -75,7 +78,7 @@ class ParsedTestClassTest {
   void streamAnnotatedMethods_withAbsentAnnotation_returnsEmptyStream() throws IOException {
     // Arrange
     var path = Paths.get("src/test/resources/com/example/test/AnnotationTest.java");
-    ParsedTestFile parsedTestFile = new ParsedTestFile(path);
+    ParsedTestFile parsedTestFile = new ParsedTestFile(path, BASE_PATH);
     ParsedTestClass parsedClass = parsedTestFile.getTestClass("AnnotationTest").get();
 
     // Act
@@ -101,7 +104,7 @@ class ParsedTestClassTest {
       String className, Integer expectedCategoryCount) throws IOException {
     // Arrange
     var path = Paths.get("src/test/resources/com/example/test/RegionTest.java");
-    ParsedTestClass parsedClass = new ParsedTestFile(path).getTestClass(className).get();
+    ParsedTestClass parsedClass = new ParsedTestFile(path, BASE_PATH).getTestClass(className).get();
 
     // Act
     Map<String, ParsedTestCategory> testCategories = parsedClass.initializeTestCategories();
@@ -117,7 +120,7 @@ class ParsedTestClassTest {
       String className, Map<String, Map<String, Integer>> expectedCategories) throws IOException {
     // Arrange
     var path = Paths.get("src/test/resources/com/example/test/RegionTest.java");
-    ParsedTestClass parsedClass = new ParsedTestFile(path).getTestClass(className).get();
+    ParsedTestClass parsedClass = new ParsedTestFile(path, BASE_PATH).getTestClass(className).get();
 
     // Act
     Map<String, Map<String, Integer>> categories =
@@ -170,7 +173,7 @@ class ParsedTestClassTest {
       String className, Map<String, List<String>> expectedCategories) throws IOException {
     // Arrange
     var path = Paths.get("src/test/resources/com/example/test/RegionTest.java");
-    ParsedTestClass parsedClass = new ParsedTestFile(path).getTestClass(className).get();
+    ParsedTestClass parsedClass = new ParsedTestFile(path, BASE_PATH).getTestClass(className).get();
 
     // Act
     Map<String, List<String>> categories =
@@ -247,7 +250,7 @@ class ParsedTestClassTest {
   void hasCategories_withValidClassWithRegions_returnsTrue() throws IOException {
     // Arrange
     var path = Paths.get("src/test/resources/com/example/test/SampleTest.java");
-    ParsedTestFile parsedTestFile = new ParsedTestFile(path);
+    ParsedTestFile parsedTestFile = new ParsedTestFile(path, BASE_PATH);
     ParsedTestClass parsedClass = parsedTestFile.getTestClass("SampleTest").get();
 
     // Act
@@ -261,7 +264,7 @@ class ParsedTestClassTest {
   void hasCategories_withValidClassWithoutRegions_returnsFalse() throws IOException {
     // Arrange
     var path = Paths.get("src/test/resources/com/example/test/SampleTest.java");
-    ParsedTestFile parsedTestFile = new ParsedTestFile(path);
+    ParsedTestFile parsedTestFile = new ParsedTestFile(path, BASE_PATH);
     ParsedTestClass parsedClass = parsedTestFile.getTestClass("SampleNoRegionTest").get();
 
     // Act
@@ -279,11 +282,11 @@ class ParsedTestClassTest {
   void toDocumentDataModel_withValidClassWithRegions_returnsExpectedDataModel() throws IOException {
     // Arrange
     var path = Paths.get("src/test/resources/com/example/test/SampleTest.java");
-    ParsedTestFile parsedTestFile = new ParsedTestFile(path);
+    ParsedTestFile parsedTestFile = new ParsedTestFile(path, BASE_PATH);
     ParsedTestClass parsedClass = parsedTestFile.getTestClass("SampleTest").get();
 
     // Act
-    TestSet dataModel = parsedClass.toDocumentDataModel(path);
+    TestSet dataModel = parsedClass.toDocumentDataModel(path, BASE_PATH);
 
     // Assert
     assertNotNull(dataModel);
@@ -332,11 +335,11 @@ class ParsedTestClassTest {
       throws IOException {
     // Arrange
     var path = Paths.get("src/test/resources/com/example/test/SampleTest.java");
-    ParsedTestFile parsedTestFile = new ParsedTestFile(path);
+    ParsedTestFile parsedTestFile = new ParsedTestFile(path, BASE_PATH);
     ParsedTestClass parsedClass = parsedTestFile.getTestClass("SampleNoRegionTest").get();
 
     // Act
-    TestSet dataModel = parsedClass.toDocumentDataModel(path);
+    TestSet dataModel = parsedClass.toDocumentDataModel(path, BASE_PATH);
 
     // Assert
     assertNotNull(dataModel);

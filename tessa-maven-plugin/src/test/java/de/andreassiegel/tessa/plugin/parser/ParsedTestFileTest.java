@@ -30,6 +30,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class ParsedTestFileTest {
 
+  static final Path BASE_PATH = Paths.get("src/test");
+
   static final String TEST_CLASS_NAME = "SampleTest";
   static final Path SAMPLE_TEST_PATH =
       Paths.get("src/test/resources/com/example/test/SampleTest.java");
@@ -39,7 +41,7 @@ class ParsedTestFileTest {
   @Test
   void constructor_canReadFile() {
     try {
-      new ParsedTestFile(SAMPLE_TEST_PATH);
+      new ParsedTestFile(SAMPLE_TEST_PATH, BASE_PATH);
     } catch (Throwable throwable) {
       fail("Constructor threw unexpected exception: " + throwable);
     }
@@ -52,7 +54,7 @@ class ParsedTestFileTest {
   @Test
   void getTestClassNames_findsSampleTest() throws IOException {
     // Arrange
-    ParsedTestFile parsedTestFile = new ParsedTestFile(SAMPLE_TEST_PATH);
+    ParsedTestFile parsedTestFile = new ParsedTestFile(SAMPLE_TEST_PATH, BASE_PATH);
 
     // Act
     Collection<String> classNames = parsedTestFile.getTestClassNames();
@@ -66,7 +68,7 @@ class ParsedTestFileTest {
   @Test
   void getTestClassNames_ignoresSampleInterface() throws IOException {
     // Arrange
-    ParsedTestFile parsedTestFile = new ParsedTestFile(SAMPLE_TEST_PATH);
+    ParsedTestFile parsedTestFile = new ParsedTestFile(SAMPLE_TEST_PATH, BASE_PATH);
 
     // Act
     Collection<String> classNames = parsedTestFile.getTestClassNames();
@@ -83,7 +85,7 @@ class ParsedTestFileTest {
   @Test
   void getTestClass_withValidClassName_returnsClassDeclaration() throws IOException {
     // Arrange
-    ParsedTestFile parsedTestFile = new ParsedTestFile(SAMPLE_TEST_PATH);
+    ParsedTestFile parsedTestFile = new ParsedTestFile(SAMPLE_TEST_PATH, BASE_PATH);
 
     // Act
     Optional<ParsedTestClass> classDeclaration = parsedTestFile.getTestClass(TEST_CLASS_NAME);
@@ -99,7 +101,7 @@ class ParsedTestFileTest {
   @NullSource
   void getTestClass_withInvalidClassName_returnsEmpty(String className) throws IOException {
     // Arrange
-    ParsedTestFile parsedTestFile = new ParsedTestFile(SAMPLE_TEST_PATH);
+    ParsedTestFile parsedTestFile = new ParsedTestFile(SAMPLE_TEST_PATH, BASE_PATH);
 
     // Act
     Optional<ParsedTestClass> classDeclaration = parsedTestFile.getTestClass(className);

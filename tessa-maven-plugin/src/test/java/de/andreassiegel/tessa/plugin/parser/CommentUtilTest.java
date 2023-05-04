@@ -35,6 +35,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
@@ -49,6 +50,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class CommentUtilTest {
 
+  static final Path BASE_PATH = Paths.get("src/test");
+
   // region javadocComment()
 
   @Test
@@ -56,7 +59,7 @@ class CommentUtilTest {
     // Arrange
     var path = Paths.get("src/test/resources/com/example/test/SampleTest.java");
     ClassOrInterfaceDeclaration declaration =
-        new ParsedTestFile(path)
+        new ParsedTestFile(path, BASE_PATH)
             .getTestClass("SampleTest")
             .map(ParsedTestClass::getClassDeclaration)
             .get();
@@ -79,7 +82,7 @@ class CommentUtilTest {
     // Arrange
     var path = Paths.get("src/test/resources/com/example/test/NoCommentTest.java");
     ClassOrInterfaceDeclaration declaration =
-        new ParsedTestFile(path)
+        new ParsedTestFile(path, BASE_PATH)
             .getTestClass(className)
             .map(ParsedTestClass::getClassDeclaration)
             .orElse(null);
@@ -103,7 +106,7 @@ class CommentUtilTest {
     // Arrange
     var path = Paths.get("src/test/resources/com/example/test/AnnotationTest.java");
     MethodDeclaration methodDeclaration =
-        new ParsedTestFile(path)
+        new ParsedTestFile(path, BASE_PATH)
                 .getTestClass("AnnotationTest")
                 .map(ParsedTestClass::getClassDeclaration)
                 .map(d -> d.getMethodsByName(methodName))
@@ -132,7 +135,7 @@ class CommentUtilTest {
     // Arrange
     var path = Paths.get("src/test/resources/com/example/test/NoCommentTest.java");
     MethodDeclaration methodDeclaration =
-        new ParsedTestFile(path)
+        new ParsedTestFile(path, BASE_PATH)
                 .getTestClass("MethodTest")
                 .map(ParsedTestClass::getClassDeclaration)
                 .map(d -> d.getMethodsByName(methodName))
@@ -157,7 +160,7 @@ class CommentUtilTest {
     // Arrange
     var path = Paths.get("src/test/resources/com/example/test/SampleTest.java");
     ClassOrInterfaceDeclaration declaration =
-        new ParsedTestFile(path)
+        new ParsedTestFile(path, BASE_PATH)
             .getTestClass("SampleTest")
             .map(ParsedTestClass::getClassDeclaration)
             .get();
@@ -175,7 +178,7 @@ class CommentUtilTest {
     // Arrange
     var path = Paths.get("src/test/resources/com/example/test/NoCommentTest.java");
     ClassOrInterfaceDeclaration declaration =
-        new ParsedTestFile(path)
+        new ParsedTestFile(path, BASE_PATH)
             .getTestClass("BlockCommentTest")
             .map(ParsedTestClass::getClassDeclaration)
             .get();
@@ -203,7 +206,7 @@ class CommentUtilTest {
     // Arrange
     var path = Paths.get("src/test/resources/com/example/test/SampleTest.java");
     MethodDeclaration declaration =
-        new ParsedTestFile(path)
+        new ParsedTestFile(path, BASE_PATH)
             .getTestClass("SampleTest")
             .map(ParsedTestClass::getClassDeclaration)
             .get()
@@ -224,7 +227,7 @@ class CommentUtilTest {
     // Arrange
     var path = Paths.get("src/test/resources/com/example/test/CommentTest.java");
     ClassOrInterfaceDeclaration declaration =
-        new ParsedTestFile(path)
+        new ParsedTestFile(path, BASE_PATH)
             .getTestClass("AsciiDocCommentTest")
             .map(ParsedTestClass::getClassDeclaration)
             .get();
@@ -271,7 +274,7 @@ class CommentUtilTest {
     // Arrange
     var path = Paths.get("src/test/resources/com/example/test/CommentTest.java");
     MethodDeclaration declaration =
-        new ParsedTestFile(path)
+        new ParsedTestFile(path, BASE_PATH)
             .getTestClass("AsciiDocCommentTest")
             .map(ParsedTestClass::getClassDeclaration)
             .get()
@@ -301,7 +304,7 @@ class CommentUtilTest {
     // Arrange
     var path = Paths.get("src/test/resources/com/example/test/CommentTest.java");
     List<Comment> comments =
-        new ParsedTestFile(path)
+        new ParsedTestFile(path, BASE_PATH)
             .getTestClass("InvalidRegionTest")
             .map(ParsedTestClass::getClassDeclaration)
             .get()

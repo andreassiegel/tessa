@@ -160,7 +160,8 @@ public class GenerateTestDocsMojo extends AbstractMojo {
   ParsedTestFile parseTestClass(Path path) {
     try {
       getLog().info("Parsing test file: " + path);
-      return new ParsedTestFile(path);
+      var projectPath = project.getBasedir().toPath();
+      return new ParsedTestFile(path, projectPath);
     } catch (IOException e) {
       getLog().error("Error parsing test file " + path, e);
       throw new RuntimeException("Error parsing test file " + path, e);

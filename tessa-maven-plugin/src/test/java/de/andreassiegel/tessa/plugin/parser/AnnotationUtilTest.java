@@ -28,6 +28,7 @@ import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
@@ -41,6 +42,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class AnnotationUtilTest {
 
+  static final Path BASE_PATH = Paths.get("src/test");
+
   // region annotationValue()
 
   @ParameterizedTest
@@ -53,7 +56,7 @@ class AnnotationUtilTest {
     // Arrange
     var path = Paths.get("src/test/resources/com/example/test/AnnotationTest.java");
     MethodDeclaration methodDeclaration =
-        new ParsedTestFile(path)
+        new ParsedTestFile(path, BASE_PATH)
                 .getTestClass("AnnotationTest")
                 .map(ParsedTestClass::getClassDeclaration)
                 .map(d -> d.getMethodsByName(methodName))
@@ -81,7 +84,7 @@ class AnnotationUtilTest {
     // Arrange
     var path = Paths.get("src/test/resources/com/example/test/AnnotationTest.java");
     MethodDeclaration methodDeclaration =
-        new ParsedTestFile(path)
+        new ParsedTestFile(path, BASE_PATH)
                 .getTestClass("AnnotationTest")
                 .map(ParsedTestClass::getClassDeclaration)
                 .map(d -> d.getMethodsByName(methodName))

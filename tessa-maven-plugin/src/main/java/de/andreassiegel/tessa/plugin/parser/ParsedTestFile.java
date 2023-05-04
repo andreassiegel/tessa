@@ -44,15 +44,18 @@ public class ParsedTestFile {
   private final Map<String, ParsedTestClass> testClasses;
 
   @Getter private final Path filePath;
+  @Getter private final Path basePath;
 
   /**
    * Instantiates the parsed test file.
    *
    * @param filePath the path of the file
+   * @param basePath the base path of the project which will be used to relativize file paths
    * @throws IOException if the file cannot be parsed
    */
-  public ParsedTestFile(Path filePath) throws IOException {
+  public ParsedTestFile(Path filePath, Path basePath) throws IOException {
     this.filePath = filePath;
+    this.basePath = basePath;
     this.compilationUnit = StaticJavaParser.parse(filePath);
     this.testClasses = parseTestClasses();
   }
@@ -131,7 +134,7 @@ public class ParsedTestFile {
   public List<TestSet> toDocumentDataModel() {
     var path = getFilePath();
     return streamTestClasses()
-        .map(classDeclaration -> classDeclaration.toDocumentDataModel(path))
+        .map(classDeclaration -> classDeclaration.toDocumentDataModel(path, basePath))
         .toList();
   }
 }

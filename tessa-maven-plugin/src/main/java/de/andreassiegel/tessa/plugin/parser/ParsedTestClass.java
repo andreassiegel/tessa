@@ -211,16 +211,17 @@ public class ParsedTestClass {
    * Converts a single class from the test file into a test documentation data model.
    *
    * @param filePath the path of the original test file
+   * @param basePath the path of the project base directory that is used to relativize file paths
    * @return the test data model
    */
-  TestSet toDocumentDataModel(Path filePath) {
+  TestSet toDocumentDataModel(Path filePath, Path basePath) {
     Map<String, List<TestCase>> testCases = new LinkedHashMap<>();
     categories.values().stream()
         .filter(ParsedTestCategory::isNotEmpty)
         .forEach(c -> testCases.put(c.getName(), c.getTestCases()));
 
     return TestSet.builder()
-        .path(filePath)
+        .path(basePath.relativize(filePath))
         .className(className)
         .title(displayName)
         .status(status)
