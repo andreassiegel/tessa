@@ -1,4 +1,4 @@
-= Tessa Sample Tests
+= Tessa Sample Test Documentation
 :experimental:
 :idprefix:
 :idseparator: -
@@ -21,7 +21,7 @@ endif::[]
 |===
 |Title |Description |Status
 
-|link:/Users/andreas/Documents/development/personal/tessa/examples/examples/SampleTest.adoc[Sample Test]
+|link:examples/SampleTest.adoc[Sample Test]
 |This test acts as a showcase to illustrate how documentation in the test class is turned into a
 test documentation file.
 |Documented

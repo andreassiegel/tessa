@@ -98,7 +98,7 @@ public class AsciiDocGenerator {
                   .description(testSet.getDescription())
                   .status(testSet.getStatus())
                   .build();
-          itemOutputDirectory.set(index.getDirectory());
+          itemOutputDirectory.set(fullIndexItemDirectory(index.getDirectory()));
           index.addToIndex(indexItem);
         });
 
@@ -121,7 +121,7 @@ public class AsciiDocGenerator {
         index -> {
           try (Writer out =
               new FileWriter(
-                  outputDirectory + "/" + indexConfiguration.getName() + ".adoc", UTF_8)) {
+                  fullIndexItemDirectory(indexConfiguration.getName()) + ".adoc", UTF_8)) {
             indexTemplate.process(index, out);
           } catch (IOException | TemplateException e) {
             throw new RuntimeException("Could not process the index template and data model", e);
@@ -142,10 +142,19 @@ public class AsciiDocGenerator {
       return Optional.empty();
     }
 
-    var itemOutputDirectory = outputDirectory + "/" + indexConfiguration.getName();
+    // relative path starting at index file path
+    var relativeItemOutputDirectory = indexConfiguration.getName();
+
+    // full path for directory initialization
+    var itemOutputDirectory = fullIndexItemDirectory(relativeItemOutputDirectory);
     initializeDirectory(itemOutputDirectory);
 
-    return Optional.of(new DocumentIndex(indexConfiguration.getTitle(), itemOutputDirectory));
+    return Optional.of(
+        new DocumentIndex(indexConfiguration.getTitle(), relativeItemOutputDirectory));
+  }
+
+  private String fullIndexItemDirectory(String relativeItemOutputDirectory) {
+    return outputDirectory + "/" + relativeItemOutputDirectory;
   }
 
   /**

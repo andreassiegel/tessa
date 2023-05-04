@@ -101,7 +101,7 @@
             <outputDirectory>${project.basedir}</outputDirectory>
             <index>
               <generateIndex>true</generateIndex>
-              <title>Tessa Sample Tests</title>
+              <title>Tessa Sample Test Documentation</title>
               <name>examples</name>
             </index>
             <linkBaseUrl>https://github.com/andreassiegel/tessa/tree/develop/examples</linkBaseUrl>
