@@ -18,19 +18,24 @@ package de.andreassiegel.tessa.plugin;
 
 import lombok.Getter;
 
-/** Configuration for index generation in the {@link GenerateTestDocsMojo}. */
+/**
+ * Configuration for index generation in the {@link GenerateTestDocsMojo}.
+ *
+ * <p>Note: The fields in this class must not be {@code final}. Otherwise, the plugin configuration
+ * from the POM file will not work!
+ */
 @Getter
 public class Index {
 
   /** Defines whether an index file should be generated (an overview of all tests). */
-  private final Boolean generateIndex = true;
+  private Boolean generateIndex = true;
 
   /**
    * The name of the subdirectory to create the test documentation files in, as well as the filename
    * of the index file without file ending.
    */
-  private final String name = "tests";
+  private String name = "tests";
 
   /** The title of the test documentation index file. */
-  private final String title = "Test Overview";
+  private String title = "Test Overview";
 }
