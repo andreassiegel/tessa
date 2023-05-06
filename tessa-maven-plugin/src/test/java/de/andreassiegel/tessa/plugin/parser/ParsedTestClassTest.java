@@ -40,6 +40,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class ParsedTestClassTest {
 
@@ -381,6 +382,42 @@ class ParsedTestClassTest {
     assertEquals(2, happyTestCases.size());
     assertEquals("Parameterized Test Case 1", happyTestCases.get(0).getTitle());
     assertEquals("Normal Test Case 2", happyTestCases.get(1).getTitle());
+  }
+
+  // endregion
+
+  // region hasTestMethods()
+
+  @ParameterizedTest
+  @ValueSource(strings= {"TestAnnotationTest", "ParameterizedTestAnnotationTest"})
+  void hasTestMethods_withValidAnnotations_returnsTrue(String className)
+      throws IOException {
+    // Arrange
+    var path = Paths.get("src/test/resources/com/example/test/AnnotationTest.java");
+    ParsedTestFile parsedTestFile = new ParsedTestFile(path, BASE_PATH);
+    ParsedTestClass parsedClass = parsedTestFile.getTestClass(className).get();
+
+    // Act
+    var result = parsedClass.hasTestMethods();
+
+    // Assert
+    assertTrue(result);
+  }
+
+  @Test
+  void hasTestMethods_withoutValidAnnotations_returnsFalse()
+      throws IOException {
+    // Arrange
+    var className = "NoAnnotationTest";
+    var path = Paths.get("src/test/resources/com/example/test/AnnotationTest.java");
+    ParsedTestFile parsedTestFile = new ParsedTestFile(path, BASE_PATH);
+    ParsedTestClass parsedClass = parsedTestFile.getTestClass(className).get();
+
+    // Act
+    var result = parsedClass.hasTestMethods();
+
+    // Assert
+    assertFalse(result);
   }
 
   // endregion

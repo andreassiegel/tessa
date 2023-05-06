@@ -58,3 +58,20 @@ class AnnotationTest {
   @NullSource
   void testMethodWithParameters(String input) {}
 }
+
+class TestAnnotationTest {
+
+  @Test
+  void someMethod() {}
+}
+
+class ParameterizedTestAnnotationTest {
+
+  @ParameterizedTest
+  void someMethod() {}
+}
+
+class NoAnnotationTest {
+
+  void someMethod() {}
+}
