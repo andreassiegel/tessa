@@ -91,7 +91,7 @@ public class ParsedTestFile {
    *
    * @return the stream of class declarations
    */
-  public Stream<ParsedTestClass> streamTestClasses() {
+  Stream<ParsedTestClass> streamTestClasses() {
     return testClasses.values().stream();
   }
 

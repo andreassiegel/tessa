@@ -18,13 +18,19 @@ package de.andreassiegel.tessa.plugin.parser;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import de.andreassiegel.tessa.plugin.model.TestSet;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
+import org.codehaus.plexus.util.cli.Arg;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -109,6 +115,126 @@ class ParsedTestFileTest {
     // Assert
     assertNotNull(classDeclaration);
     assertTrue(classDeclaration.isEmpty());
+  }
+
+  // endregion
+
+  // region containsTests()
+
+  @Test
+  void containsTests_withoutClasses_returnsFalse() throws IOException {
+    // Arrange
+    Path path = Paths.get("src/test/resources/com/example/test/Empty.java");
+    ParsedTestFile parsedTestFile = new ParsedTestFile(path, BASE_PATH);
+
+    // Act
+    var result = parsedTestFile.containsTests();
+
+    // Assert
+    assertFalse(result);
+  }
+
+  @Test
+  void containsTests_withoutTests_returnsFalse() throws IOException {
+    // Arrange
+    Path path = Paths.get("src/test/resources/com/example/test/NoCommentTest.java");
+    ParsedTestFile parsedTestFile = new ParsedTestFile(path, BASE_PATH);
+
+    // Act
+    var result = parsedTestFile.containsTests();
+
+    // Assert
+    assertFalse(result);
+  }
+
+  @Test
+  void containsTests_withTestClasses_returnsTrue() throws IOException {
+    // Arrange
+    Path path = Paths.get("src/test/resources/com/example/test/SampleTest.java");
+    ParsedTestFile parsedTestFile = new ParsedTestFile(path, BASE_PATH);
+
+    // Act
+    var result = parsedTestFile.containsTests();
+
+    // Assert
+    assertTrue(result);
+  }
+
+  // endregion
+
+  // streamTestClasses()
+
+  @Test
+  void streamTestClasses_withoutClasses_returnsEmptyStream() throws IOException {
+    // Arrange
+    Path path = Paths.get("src/test/resources/com/example/test/Empty.java");
+    ParsedTestFile parsedTestFile = new ParsedTestFile(path, BASE_PATH);
+
+    // Act
+    var result = parsedTestFile.streamTestClasses();
+
+    // Assert
+    assertNotNull(result);
+    assertTrue(result.toList().isEmpty());
+  }
+
+  @ParameterizedTest
+  @MethodSource("streamTestClassesData")
+  void streamTestClasses_withClasses_returnsStream(String fileName, List<String> expectedClassNames) throws IOException {
+    // Arrange
+    Path path = Paths.get("src/test/resources/com/example/test/" + fileName);
+    ParsedTestFile parsedTestFile = new ParsedTestFile(path, BASE_PATH);
+
+    // Act
+    var result = parsedTestFile.streamTestClasses();
+
+    // Assert
+    assertNotNull(result);
+    assertEquals(expectedClassNames, result.map(ParsedTestClass::getClassName).toList());
+  }
+
+  static Stream<Arguments> streamTestClassesData() {
+    return Stream.of(
+      Arguments.of("SampleTest.java", List.of("SampleTest", "SampleNoRegionTest")),
+      Arguments.of("NoCommentTest.java", List.of("LineCommentTest", "BlockCommentTest", "MethodTest", "NoCommentTest"))
+    );
+  }
+
+  // endregion
+
+  // region toDocumentDataModel()
+
+  @Test
+  void toDocumentDataModel_withEmptyFile_returnsEmptyList() throws IOException {
+    // Arrange
+    Path path = Paths.get("src/test/resources/com/example/test/Empty.java");
+    ParsedTestFile parsedTestFile = new ParsedTestFile(path, BASE_PATH);
+
+    // Act
+    var result = parsedTestFile.toDocumentDataModel();
+
+    // Assert
+    assertNotNull(result);
+    assertTrue(result.isEmpty());
+  }
+
+  @Test
+  void toDocumentDataModel_withTestFile_returnsTestSetList() throws IOException {
+    // Arrange
+    Path path = Paths.get("src/test/resources/com/example/test/SampleTest.java");
+    ParsedTestFile parsedTestFile = new ParsedTestFile(path, BASE_PATH);
+
+    // Act
+    var result = parsedTestFile.toDocumentDataModel();
+
+    // Assert
+    assertNotNull(result);
+    assertFalse(result.isEmpty());
+    assertEquals(2, result.size());
+
+    List<String> testSetClassNames = result.stream().map(TestSet::getClassName).toList();
+    assertTrue(testSetClassNames.contains("SampleTest"));
+    assertTrue(testSetClassNames.contains("SampleNoRegionTest"));
   }
 
   // endregion
