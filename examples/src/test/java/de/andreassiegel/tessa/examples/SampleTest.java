@@ -1,11 +1,3 @@
-/*
- * Copyright © 2023 Mercedes-Benz AG. All Rights Reserved.
- * <p>
- * Reproduction or transmission in whole or in part, in any form or by any means, is prohibited without the prior written consent of the copyright owner.
- * <p>
- * Software produced by pentacor GmbH (in order of Mercedes-Benz AG)
- */
-
 package de.andreassiegel.tessa.examples;
 
 /*-
