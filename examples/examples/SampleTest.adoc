@@ -64,7 +64,7 @@ WARNING: These tests are currently not working because there is no implementatio
 |Status
 |Documented
 |Method Link
-|link:https://github.com/andreassiegel/tessa/tree/develop/examples/src/test/java/de/andreassiegel/tessa/examples/SampleTest.java#L72-L89[`happyCase1`]
+|link:https://github.com/andreassiegel/tessa/tree/develop/examples/src/test/java/de/andreassiegel/tessa/examples/SampleTest.java#L64-L81[`happyCase1`]
 |===
 
 
@@ -81,7 +81,7 @@ WARNING: These tests are currently not working because there is no implementatio
 |Status
 |Documented
 |Method Link
-|link:https://github.com/andreassiegel/tessa/tree/develop/examples/src/test/java/de/andreassiegel/tessa/examples/SampleTest.java#L96-L141[`failureCase1`]
+|link:https://github.com/andreassiegel/tessa/tree/develop/examples/src/test/java/de/andreassiegel/tessa/examples/SampleTest.java#L88-L133[`failureCase1`]
 |===
 
 WARNING: This test is currently not working because of reasons.
